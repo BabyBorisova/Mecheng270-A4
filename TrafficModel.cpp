@@ -39,13 +39,6 @@ int TrafficModel::get_lane_change_command(int id)
 void TrafficModel::update()
 {
 	// TODO: complete this function
-  /*
-  for each car (ordered):
-    find desired move
-    do or:
-     move forwards if cant
-    update platoons
-  */
 }
 
 

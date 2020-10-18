@@ -48,3 +48,69 @@ Car* Platoon::get_head()
 	return head;
 }
 
+void Platoon::prepend(Car* c)
+{
+  // if the platton is empty
+  if (this->head == NULL) {
+    this->head = c;
+    this->tail = c;
+    return;
+  }
+  // else
+  this->head->set_prev(c);
+  c->set_next(this->head);
+  c->set_prev(NULL);
+  this->head = c;
+  return;
+}
+
+void Platoon::append(Car* c)
+{
+  // if the platton is empty
+  if (this->head == NULL) {
+    this->head = c;
+    this->tail = c;
+    return;
+  }
+  // else
+  this->tail->set_next(c);
+  c->set_prev(this->tail);
+  c->set_next(NULL);
+  this->tail = c;
+  return;
+}
+
+void Platoon::remove(Car* c)
+//the removed cars pointers will be sorted when its added to another platton
+{
+  // if theres only one car
+  if (this->head == this->tail) {
+    this->head = NULL;
+    this->tail = NULL;
+    return;
+  }
+  // if its the head
+  if (this->head == c) {
+    this->head = head->get_next();
+    this->head->set_prev(NULL);
+    return;
+  }
+  // if its the tail
+  if (this->tail == c) {
+    this->tail = tail->get_prev();
+    this->tail->set_next(NULL);
+    return;
+  }
+  // else, loop through remaining cars (!head, !tail)
+  Car* car = this->head->get_next();
+  while(car->get_next() != NULL) {
+    if (car == c){
+      car->get_prev()->set_next(car->get_next());
+      car->get_next()->set_prev(car->get_prev());
+      return;
+    }
+    car = car->get_next();
+  }
+  //return in case the car was not in the platoon
+  return;
+}

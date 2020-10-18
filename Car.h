@@ -8,7 +8,6 @@ using namespace std;
 class Car {
 
 	private:
-    static int nextID;
 		int id;
         int position;
 
