@@ -33,12 +33,56 @@ int TrafficModel::get_lane_change_command(int id)
 	return 0;
 }
 
+
 /*
  * The function that updates the vehicle positions and states.
  */
 void TrafficModel::update()
 {
-	// TODO: complete this function
+  // creates ordered list of cars to move
+	vector<vector<Car*>> order;
+  for (unsigned int i = 0 ; i < this->platoons.size(); ++i) {
+    Car* car = this->platoons[i].get_head();
+    while (car != NULL) {
+      order[i].push_back(car);
+    }
+  }
+
+  for (unsigned int i = 0; i < order.size(); ++i) {
+    for (unsigned int j = 0; j < order[i].size(); ++j) {
+      Car* c = order[i][j];
+      int light = get_lane_change_command(c->get_id());
+
+      if (light == 0){
+        //move forwards if next position is empty
+        if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
+          c->set_position(c->get_position() + 1);
+        }
+        //moves on to next car
+        continue;
+      }
+      //LANE CHANGE:
+      // convertes light signal to a lane
+      light -= (1 + light%2);
+      // if the lane we want to move to doesnt exist, move forward
+      int si = (int)i;
+      if ((si+light < 0) || (si+light == int(this->platoons.size()))) {
+        if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
+          c->set_position(c->get_position() + 1);
+        }
+        continue;
+      }
+      // If we can change lanes then do so otherwise move forwards
+      if (this->platoons[i+light].pos_is_empty(c->get_position())){
+        platoons[i].remove(c);
+        platoons[i+light].insert(c);
+        continue;
+      }
+      if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
+        c->set_position(c->get_position() + 1);
+      }
+    }
+  }
 }
 
 
