@@ -143,3 +143,16 @@ void Platoon::insert(Car *c)
   append(c);
   return;
 }
+
+// Checks if any car is occupying a specified position
+const bool Platoon::pos_is_empty(int pos)
+{
+  Car* car = this->head;
+  while (car != NULL) {
+    if (car->get_position() == pos) {
+      return false;
+    }
+    car = car->get_next();
+  }
+  return true;
+}

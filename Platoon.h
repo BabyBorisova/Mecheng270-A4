@@ -23,6 +23,8 @@ class Platoon
         void append(Car* c); 
         void prepend(Car* c); 
         void insert(Car* c);
+
+        const bool pos_is_empty(int pos);
         
 
 };
