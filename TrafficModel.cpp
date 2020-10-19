@@ -2,7 +2,30 @@
 #include <iostream>
 
 TrafficModel::TrafficModel() { }
-TrafficModel::~TrafficModel(){ }
+
+// frees memory allocated to cars
+TrafficModel::~TrafficModel()
+{
+  for (unsigned int i = 0; i < this->platoons.size(); ++i) {
+    Platoon p = this->platoons[i];
+    // if empty
+    if (p.get_head() == NULL) {
+      continue;
+    }
+    // if only one car
+    if (p.get_head() == p.get_tail()) {
+      free (p.get_head());
+      continue;
+    }
+    // loop through delete cars
+    Car* c = p.get_head()->get_next();
+    while (c != NULL) {
+      free (c->get_prev());
+      c = c->get_next();
+    }
+    free (p.get_tail());
+  }
+}
 
 void TrafficModel::set_commands(vector<string> commands)
 {

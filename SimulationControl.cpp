@@ -6,11 +6,11 @@ SimulationControl::SimulationControl()
 	view = new SimulationUI("input.txt");
 }
 
-//destructor, also deletes owned objects 
+//destructor, frees memory of UI, call model delete to free cars
 SimulationControl::~SimulationControl()
 {
-	//delete model;
-  //delete view;
+	delete (model);
+  free (view);
 }
 
 bool SimulationControl::run()
