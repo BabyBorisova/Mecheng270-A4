@@ -1,4 +1,5 @@
 #include "TrafficModel.h"
+#include <iostream>
 
 TrafficModel::TrafficModel() { }
 TrafficModel::~TrafficModel(){ }
@@ -42,9 +43,12 @@ void TrafficModel::update()
   // creates ordered list of cars to move
 	vector<vector<Car*>> order;
   for (unsigned int i = 0 ; i < this->platoons.size(); ++i) {
+    //adds a new empty vector to represent lane
+    order.push_back({});
     Car* car = this->platoons[i].get_head();
     while (car != NULL) {
       order[i].push_back(car);
+      car = car->get_next();
     }
   }
 
