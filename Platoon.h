@@ -16,7 +16,6 @@ class Platoon
 
     public:
         Platoon(string init);
-        ~Platoon();
 
         Car* get_tail();
         Car* get_head();

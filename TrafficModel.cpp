@@ -46,10 +46,10 @@ void TrafficModel::update()
   for (unsigned int i = 0 ; i < this->platoons.size(); ++i) {
     //adds a new empty vector to represent lane
     order.push_back({});
-    Car* car = this->platoons[i].get_tail();
-    while (car != NULL) {
-      order[i].push_back(car);
-      car = car->get_prev();
+    Car* c = this->platoons[i].get_tail();
+    while (c != NULL) {
+      order[i].push_back(c);
+      c = c->get_prev();
     }
   }
 
@@ -57,23 +57,25 @@ void TrafficModel::update()
     for (unsigned int j = 0; j < order[i].size(); ++j) {
       Car* c = order[i][j];
       int light = get_lane_change_command(c->get_id());
+      int forwards = c->get_position() + 1;
+      bool empty = this->platoons[i].pos_is_empty(forwards);
 
+      // NO LANE CHANGE: 
       if (light == 0){
         //move forwards if next position is empty
-        if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
-          c->set_position(c->get_position() + 1);
+        if (empty) {
+          c->set_position(forwards);
         }
-        //moves on to next car
         continue;
       }
       //LANE CHANGE:
-      // convertes light signal to a lane
+      // convertes light signal to a lane (-1 : left, +1 : right)
       light -= (1 + light%2);
-      // if the lane we want to move to doesnt exist, move forward
+      // if the lane we want to move to doesnt exist (out of bounds), move forward
       int si = (int)i;
       if ((si+light < 0) || (si+light == int(this->platoons.size()))) {
-        if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
-          c->set_position(c->get_position() + 1);
+        if (empty) {
+          c->set_position(forwards);
         }
         continue;
       }
@@ -83,8 +85,8 @@ void TrafficModel::update()
         platoons[i+light].insert(c);
         continue;
       }
-      if (this->platoons[i].pos_is_empty(c->get_position() + 1)) {
-        c->set_position(c->get_position() + 1);
+      if (empty) {
+        c->set_position(forwards);
       }
     }
   }

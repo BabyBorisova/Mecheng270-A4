@@ -106,17 +106,15 @@ void Platoon::remove(Car* c)
     return;
   }
   // else, loop through remaining cars (!head, !tail)
-  Car* car = this->head->get_next();
-  while(car->get_next() != NULL) {
-    if (car == c){
-      car->get_prev()->set_next(car->get_next());
-      car->get_next()->set_prev(car->get_prev());
+  Car* current = this->head->get_next();
+  while(current->get_next() != NULL) {
+    if (current == c){
+      current->get_prev()->set_next(current->get_next());
+      current->get_next()->set_prev(current->get_prev());
       return;
     }
-    car = car->get_next();
+    current = current->get_next();
   }
-  //return in case the car was not in the platoon
-  return;
 }
 
 // inserts a car in platoon based on its position. Assumes there are no conflicts
@@ -127,17 +125,17 @@ void Platoon::insert(Car *c)
     prepend(c);
     return;
   }
-  Car* car = this->head->get_next();
-  while (car != NULL) {
+  Car* current = this->head->get_next();
+  while (current != NULL) {
     // Insert behind 'car'
-    if (car->get_position() > c->get_position()) {
-      c->set_next(car);
-      c->set_prev(car->get_prev());
+    if (current->get_position() > c->get_position()) {
+      c->set_next(current);
+      c->set_prev(current->get_prev());
       c->get_prev()->set_next(c);
-      car->set_prev(c);
+      current->set_prev(c);
       return;
     }
-    car = car->get_next();
+    current = current->get_next();
   }
   //looped through all so must be the lead car (tail)
   append(c);
@@ -147,33 +145,12 @@ void Platoon::insert(Car *c)
 // Checks if any car is occupying a specified position
 const bool Platoon::pos_is_empty(int pos)
 {
-  Car* car = this->head;
-  while (car != NULL) {
-    if (car->get_position() == pos) {
+  Car* current = this->head;
+  while (current != NULL) {
+    if (current->get_position() == pos) {
       return false;
     }
-    car = car->get_next();
+    current = current->get_next();
   }
   return true;
-}
-
-//Destructor, deletes cars contained in the platoon
-Platoon::~Platoon() {
-  // if empty
-  if (head == NULL) {
-    return;
-  }
-  // if only one car
-  if (head == tail) {
-    delete head;
-    return;
-  }
-  // loop through cars, delete previous
-  Car* c = head->get_next();
-  while (c != NULL) {
-    delete c->get_prev();
-    c = c->get_next();
-  }
-  //finally, delete the tail car
-  delete tail;
 }

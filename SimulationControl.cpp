@@ -6,9 +6,11 @@ SimulationControl::SimulationControl()
 	view = new SimulationUI("input.txt");
 }
 
+//destructor, also deletes owned objects 
 SimulationControl::~SimulationControl()
 {
-	// TODO: destructor
+	//delete model;
+  //delete view;
 }
 
 bool SimulationControl::run()
