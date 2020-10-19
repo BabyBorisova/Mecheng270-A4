@@ -40,7 +40,8 @@ int TrafficModel::get_lane_change_command(int id)
  */
 void TrafficModel::update()
 {
-  // creates ordered list of cars to move
+  // creates ordered list of cars to move (right to left, top to bottom)
+  // the linked lists will be be shuffled during update so will loose thier order
 	vector<vector<Car*>> order;
   for (unsigned int i = 0 ; i < this->platoons.size(); ++i) {
     //adds a new empty vector to represent lane

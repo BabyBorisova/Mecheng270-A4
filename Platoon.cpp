@@ -156,3 +156,24 @@ const bool Platoon::pos_is_empty(int pos)
   }
   return true;
 }
+
+//Destructor, deletes cars contained in the platoon
+Platoon::~Platoon() {
+  // if empty
+  if (head == NULL) {
+    return;
+  }
+  // if only one car
+  if (head == tail) {
+    delete head;
+    return;
+  }
+  // loop through cars, delete previous
+  Car* c = head->get_next();
+  while (c != NULL) {
+    delete c->get_prev();
+    c = c->get_next();
+  }
+  //finally, delete the tail car
+  delete tail;
+}
