@@ -54,6 +54,8 @@ void Platoon::prepend(Car* c)
   if (this->head == NULL) {
     this->head = c;
     this->tail = c;
+    c->set_next(NULL);
+    c->set_prev(NULL);
     return;
   }
   // else
@@ -70,6 +72,8 @@ void Platoon::append(Car* c)
   if (this->head == NULL) {
     this->head = c;
     this->tail = c;
+    c->set_next(NULL);
+    c->set_prev(NULL);
     return;
   }
   // else
@@ -112,5 +116,30 @@ void Platoon::remove(Car* c)
     car = car->get_next();
   }
   //return in case the car was not in the platoon
+  return;
+}
+
+// inserts a car in platoon based on its position. Assumes there are no conflicts
+void Platoon::insert(Car *c)
+{
+  // if empty or behind the head
+  if ((this->head == NULL) || (this->head->get_position() > c->get_position())) {
+    prepend(c);
+    return;
+  }
+  Car* car = this->head->get_next();
+  while (car != NULL) {
+    // Insert behind 'car'
+    if (car->get_position() > c->get_position()) {
+      c->set_next(car);
+      c->set_prev(car->get_prev());
+      c->get_prev()->set_next(c);
+      car->set_prev(c);
+      return;
+    }
+    car = car->get_next();
+  }
+  //looped through all so must be the lead car (tail)
+  append(c);
   return;
 }
