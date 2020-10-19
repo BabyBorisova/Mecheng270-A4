@@ -45,10 +45,10 @@ void TrafficModel::update()
   for (unsigned int i = 0 ; i < this->platoons.size(); ++i) {
     //adds a new empty vector to represent lane
     order.push_back({});
-    Car* car = this->platoons[i].get_head();
+    Car* car = this->platoons[i].get_tail();
     while (car != NULL) {
       order[i].push_back(car);
-      car = car->get_next();
+      car = car->get_prev();
     }
   }
 
