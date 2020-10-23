@@ -22,18 +22,8 @@ Platoon::Platoon(string init)
 			s2 >> pos_value;
 			Car* car = new Car(id_value, pos_value);
 
-            if (head == NULL)
-            {
-                head = car;
-                tail = car;
-            }
-            else
-            {
-                tail->set_next(car);
-                car->set_prev(tail);
-                tail = car;
-                car->set_next(NULL);
-            }
+            // adds car to the platton, maintaining ordering.
+            this->insert(car);
 		}
 	}
 }
